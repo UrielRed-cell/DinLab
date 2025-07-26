@@ -1,8 +1,12 @@
 interfaz/Animacion.class
+interfaz/PanelInfoObjeto.class
 interfaz/VentanaCarga.class
+figuras/Figuras.class
 dinlab/Main.class
-fisicas/ArrayFig.class
 util/CSV.class
-fisicas/Figuras.class
-fisicas/Fuerza.class
+interfaz/VentanaFuerza.class
+figuras/Ejes.class
+fisicas/Vector.class
+figuras/ArrayFig.class
 interfaz/VentanaPrincipal.class
+figuras/Fuerza.class

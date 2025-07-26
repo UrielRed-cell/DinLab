@@ -1,14 +1,16 @@
 package interfaz;
 
 
-import fisicas.ArrayFig;
+import figuras.ArrayFig;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -21,7 +23,6 @@ public class VentanaPrincipal {
 	private Scene scene;
 	private Canvas canvas;
 	private Animacion animacion;
-	private ArrayFig arrayFg;
 	public VentanaPrincipal() {
 		stage = new Stage();
 		configurarVentana();
@@ -35,19 +36,21 @@ public class VentanaPrincipal {
 	}
 
 	private BorderPane crearBorderPanePrincipal() {
+		VBox panelInfo;
 		BorderPane borderPane = new BorderPane();
 		Canvas cn=crearCanvas();
-		arrayFg=new ArrayFig();
-		animacion=new Animacion(cn);
+		panelInfo=crearPanelInfo();
+		animacion=new Animacion(cn,panelInfo);
+		borderPane.setCenter(cn);
 		borderPane.setTop(crearMenuBar());
 		borderPane.setLeft(crearBotones());
-		borderPane.setCenter(cn);
+		borderPane.setRight(panelInfo);
 		return borderPane;
 	}
 
 	private VBox crearMenuBar() {
 		VBox vBox = new VBox();
-		vBox.getChildren().addAll(crearMenuSuperior(), crearMenuInferior());
+		vBox.getChildren().addAll(crearMenuSuperior(), crearToolBar());
 		return vBox;
 	}
 
@@ -56,6 +59,8 @@ public class VentanaPrincipal {
 		Menu vista = new Menu("Vista");
 		MenuItem limpiarVista=new MenuItem("Limpiar vista");
 		MenuItem verEjes = new MenuItem("Ejes");
+		verEjes.setOnAction(e->animacion.dibujarEjes());
+		limpiarVista.setOnAction(e->animacion.destructor(true));
 		vista.getItems().addAll(verEjes,limpiarVista);
 		menuBar.getMenus().addAll(vista);
 		return menuBar;
@@ -64,10 +69,24 @@ public class VentanaPrincipal {
 	private MenuBar crearMenuInferior() {
 		MenuBar menuBar = new MenuBar();
 		Menu ejecutar = new Menu("Ejecutar");
+		ejecutar.setOnAction(e->animacion.ejecutar());
 		menuBar.getMenus().addAll(ejecutar);
 		return menuBar;
 	}
-
+	
+	private ToolBar crearToolBar() {
+		ToolBar toolBar=new ToolBar();
+		Button btnEjecutar=new Button("Ejecutar");
+		Button btnRecargar=new Button("Recargar");
+		btnEjecutar.setOnAction(e->animacion.ejecutar());
+		btnRecargar.setOnAction(e->{
+			animacion.limpiarCanvas();
+			animacion.redibujar();
+		});
+		toolBar.getItems().addAll(btnEjecutar,btnRecargar);
+		return toolBar;
+	}
+	
 	private VBox crearBotones() {
 		VBox vBox = new VBox();
 		HBox hBox = new HBox();
@@ -79,11 +98,18 @@ public class VentanaPrincipal {
 	}
 	
 	private Canvas crearCanvas() {
-		canvas=new Canvas(400,400);
+		canvas=new Canvas(650,500);
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		gc.setFill(Color.WHITE);
 		gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 		return canvas;
+	}
+	
+	private VBox crearPanelInfo() {
+		VBox vBox=new VBox();
+		Label titulo=new Label("Panel de información");
+		vBox.getChildren().add(titulo);
+		return vBox;
 	}
 	public GraphicsContext interfazCanvas() {
 		return canvas.getGraphicsContext2D();

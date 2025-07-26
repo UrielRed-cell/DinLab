@@ -1,16 +1,11 @@
-package fisicas;
+package figuras;
 
 import java.util.ArrayList;
 
 public class ArrayFig {
 	private ArrayList<Figuras> arrayFg=new ArrayList<>();
-	public ArrayFig() {
-		System.out.println("Listo array");
-	}
+	public ArrayFig() {}
 	public void añadir(Figuras fg) {
-		arrayFg.add(fg);
-	}
-	public void añadir(Fuerza fg) {
 		arrayFg.add(fg);
 	}
 	public boolean eliminar(int[] indice) {
@@ -29,5 +24,8 @@ public class ArrayFig {
 	}
 	public ArrayList<Figuras> array(){
 		return arrayFg;
+	}
+	public void eliminarTodo() {
+		arrayFg.clear();
 	}
 }
